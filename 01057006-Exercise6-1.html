@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>01057006-Exercise6-1</title>
+    <style type="text/css">
+        li {
+            display: inline;
+            margin-right: 10px;
+        }
+
+        ol {
+            margin-left: 0;
+            padding-left: 0;
+        }
+
+        img.dice {
+            width: 100px;
+            height: 100px;
+        }
+
+        img.congrats {
+            width: 440px;
+        }
+
+        #msg {
+            font-family: Helvetica, "Microsoft YaHei", "LiHei Pro", TW-Kai;
+            font-size: 120%;
+            color: navy;
+        }
+    </style>
+
+     <script>
+        // variables used to interact with the img elements
+        var die1Value=0;
+        var die2Value=0;
+        var die3Value=0;
+        var die4Value=0;
+
+        // register button listener and get the img elements
+        function start()
+        {
+            var button_roll = document.getElementById( "rollButton" );
+            button_roll.addEventListener( "click", rollDice, false );
+            var button_cheat1 = document.getElementById( "cheatButton" );
+            button_cheat1.addEventListener( "click", setDice_1, false );
+            var button_cheat2 = document.getElementById( "cheatButton2" );
+            button_cheat2.addEventListener( "click", setDice_2, false );
+            
+        } // end function start
+   
+        // roll the dice
+        function rollDice()
+        {
+            // loop to roll die 4 times
+            for ( var i = 1; i <= 4; ++i ) 
+            {
+               face = Math.floor( 1 + Math.random() * 6 );
+               countRolls( i, face ); // increment a frequency counter
+               setImage( i, face ); // display appropriate die image
+            } // end die rolling loop
+
+            detect_mode();
+            die1Value=0;
+            die2Value=0;
+            die3Value=0;
+            die4Value=0;
+
+        } // end function rollDice
+
+        function setDice_1()
+        {   
+            face = Math.floor( 1 + Math.random() * 6 );
+            for ( var i = 1; i <= 4; ++i ) 
+            {
+               countRolls( i, face ); // increment a frequency counter
+               setImage( i, face ); // display appropriate die image
+            } // end die rolling loop
+
+            detect_mode();
+            die1Value=0;
+            die2Value=0;
+            die3Value=0;
+            die4Value=0;
+        }
+
+        function setDice_2()
+        {   
+            for ( var i = 1; i <= 2; ++i ) 
+            {
+               countRolls( i, 6 ); 
+               setImage( i, 6 ); 
+            } 
+            face = Math.floor( 1 + Math.random() * 5 );
+            for ( var i = 3; i <= 4; ++i ) 
+            {
+               countRolls( i, face ); // increment a frequency counter
+               setImage( i, face ); // display appropriate die image
+            } // end die rolling loop
+
+            detect_mode();
+            die1Value=0;
+            die2Value=0;
+            die3Value=0;
+            die4Value=0;
+        }
+
+        function countRolls( i, face )
+        {
+            switch ( i ) 
+            {
+               case 1:
+               die1Value+=face;
+                  break;
+               case 2:
+               die2Value+=face;
+                  break;
+               case 3:
+               die3Value+=face;
+                  break;
+               case 4:
+               die4Value+=face;
+                  break;
+            } // end switch
+        } // end function tallyRoll
+
+        function detect_mode()
+        {   
+            var message="";
+            if(die1Value == die2Value && die3Value == die4Value && die1Value== die4Value)
+                message += 'Congratulation! Your roll is "一色"!' + '<br>' + '<img src=" congrats.png ">';
+            else if (die1Value != die2Value && die1Value != die3Value && die1Value != die4Value && die2Value != die3Value && die2Value != die4Value && die3Value != die4Value)
+                message += 'Oops! Your roll is "無面"!';
+            else if ((die1Value == die2Value && die2Value == die3Value) || (die2Value == die3Value && die3Value == die4Value) || (die1Value == die2Value && die2Value == die4Value))
+                message += 'No decision, please re-roll the dice!';
+            
+
+            else if ( die1Value == die2Value && die3Value == die4Value && die1Value > die3Value){
+                if(parseInt(die1Value + die2Value) == 12)
+                    message += 'Congratulation! Your roll is "十八"!' + '<br>' + '<img src=" congrats.png "> '+ '<br>';
+                message += 'Your score is ' + parseInt(die1Value + die2Value) +'!';
+            }
+            else if ( die1Value == die2Value && die3Value == die4Value && die1Value < die3Value){
+                if(parseInt(die3Value + die4Value) == 12)
+                    message += 'Congratulation! Your roll is "十八"!' + '<br>' + '<img src=" congrats.png "> '+ '<br>';
+                message += 'Your score is ' + parseInt(die3Value + die4Value) +'!';
+            }
+            else if ( die1Value == die3Value && die2Value == die4Value && die1Value > die2Value){
+                if(parseInt(die1Value + die3Value) == 12)
+                    message += 'Congratulation! Your roll is "十八"!' + '<br>' + '<img src=" congrats.png "> '+ '<br>';
+                message += 'Your score is ' + parseInt(die1Value + die3Value) +'!';
+            }
+            else if ( die1Value == die3Value && die2Value == die4Value && die1Value < die2Value){
+                if(parseInt(die2Value + die4Value) == 12)
+                    message += 'Congratulation! Your roll is "十八"!' + '<br>' + '<img src=" congrats.png "> '+ '<br>';
+                message += 'Your score is ' + parseInt(die2Value + die4Value) +'!';
+            }
+            else if ( die1Value == die4Value && die2Value == die3Value && die1Value > die3Value){
+                if(parseInt(die1Value + die4Value) == 12)
+                    message += 'Congratulation! Your roll is "十八"!' + '<br>' + '<img src=" congrats.png "> '+ '<br>';
+                message += 'Your score is ' + parseInt(die1Value + die4Value) +'!';  
+            }
+                
+            else if ( die1Value == die4Value && die2Value == die3Value && die1Value < die3Value){
+                if(parseInt(die2Value + die3Value) == 12)
+                    message += 'Congratulation! Your roll is "十八"!' + '<br>' + '<img src=" congrats.png "> '+ '<br>';
+                message += 'Your score is ' + parseInt(die2Value + die3Value) +'!';  
+            }
+                
+            const msgObject = document.getElementById("msg");
+            msgObject.innerHTML = message;
+        }
+
+        // set src and alt attributes for a die
+        function setImage( dieNumber, face )
+        {
+            var dieImg = document.getElementById( "die" + dieNumber );
+            dieImg.setAttribute( "src", "die" + face + ".jpg" ); 
+            dieImg.setAttribute( "alt", "die with " + face + " spot(s)"); 
+        } // end function setImage
+   
+        window.addEventListener( "load", start, false );
+    </script>
+
+</head>
+
+<body>
+    <form action="#">
+        <input id="rollButton" type="button" value="Roll Dice">
+        <input id="cheatButton" type="button" value="Shortcut">
+        <input id="cheatButton2" type="button" value="Shortcut2">
+    </form>
+    <ol>
+        <li><img id="die1" class="dice" src="blank.jpg" alt="blank image"></li>
+        <li><img id="die2" class="dice" src="blank.jpg" alt="blank image"></li>
+        <li><img id="die3" class="dice" src="blank.jpg" alt="blank image"></li>
+        <li><img id="die4" class="dice" src="blank.jpg" alt="blank image"></li>
+    
+    </ol>
+    <div id="msg"></div>
+</body>
+
+</html>

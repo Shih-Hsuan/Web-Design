@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Resume</title>
+    <style>
+
+    * {
+      max-width: 700px;
+      margin: auto;
+    }
+
+    div {
+      border-radius: 5px;
+    }
+
+    #header {
+      height: 40px;
+      width: 100%;
+      background-color: #66666e;
+      position: fixed;
+      z-index: 1;
+      color: white;
+      text-align: center;
+    }
+
+    .picture{
+        float: right;
+        position: relative;
+	      right: -50px;
+    }
+
+    #title {
+      margin-left: 3%;
+    }
+
+    #footer {
+      height: 50px;
+      width: 100%;
+      background-color: #66666e;
+      clear: both;
+      position: relative;
+    }
+
+    .left {
+      height: 1000px;
+      width: 45px;
+      background-color: #9999a1;
+      float: left;
+      position: fixed;
+    }
+
+    .right {
+      height: 1000px;
+      width: 45px;
+      background-color: #9999a1;
+      float: right;
+      position: inherit;
+    }
+
+    .stuff {
+      display: inline-block;
+      margin-top: 6px;
+      margin-left: 55px;
+      width: 75%;
+      height: 1000px;
+    }
+
+    a div:hover { 
+                 background-color: #f4f4f6; 
+                 text-decoration: underline;
+                }
+
+    p,ul {
+      font-family: '微軟正黑體';
+    }
+
+    .head {
+      font-size: 20px;
+      font-weight: bolder;
+      text-decoration: solid;
+    }
+
+    #name {
+      font-family: Sacramento;
+      float: right;
+      margin-top: 10px;
+      margin-right: 4%;
+    }
+
+    a {
+      color: black;
+      text-decoration: none;
+    }
+
+    .email,
+    .phone {
+            color: #999;
+            font-weight: 300;
+         
+    }
+
+    .email_phone{
+        position: relative;
+	      bottom: -500px;
+	      left: 5px;
+    }
+
+    .separator {
+            height: 10px;
+            display: inline-block;
+            border-left: 2px solid #999;
+            margin: 0px 10px;
+    }
+
+    </style>
+</head>
+
+<body>
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'>
+    <div id="header"><h1>個人簡歷</h1></div>
+    <div class="left"></div>
+    <div class="stuff">
+        <br><br>
+        <div class="picture"><img src="pig.jpeg" width="150px"></div>
+        <div>
+            <div class="head">基本資料</div>
+                <div>姓名: 劉時軒</div>
+                <div>生日:民國 92 年 6 月 2 日</div>
+                <a href="https://cse.ntou.edu.tw/ " target="_blank">
+                <div>學歷: 國立台灣海洋大學資訊工程學系</div></a>
+        </div>
+
+        <div>
+          
+        </div>
+
+        <p class="head">興趣</p>
+        <ul>
+            <li>健身</li>
+            <li>畫畫</li>
+            <li>小提琴</li>
+        </ul>
+        <p class="head">運動專長</p>
+        <ul>
+            <li>網球</li>
+            <li>桌球</li>
+        </ul>
+        <p class="head">學術專長</p>
+        <ul>
+            <li>數學</li>
+            <li>物理</li>
+        </ul>
+        <p class="head">參賽紀錄</p>
+        <ul>
+            <li>TMT11(良好)</li>
+            <li>AMC12(優良)</li>
+            <li>第22屆TRML</li>
+            <li>第4屆APX中高級</li>
+        </ul>
+
+        <div class="email_phone">
+          <span class="email">Email: </span>
+          <span>01057006@gmail.com</span>
+          <span class="separator"></span>
+          <span class="phone">Phone: </span>
+          <span>0912-456789</span>
+        </div>
+    </div>
+    <div class="right"></div>
+    <div id="footer">
+    <h2 id="name" style="color: white;">個人申請生:劉時軒</h2></div>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>15-Puzzle</title>
+    <meta charset="utf-8">
+    <style type="text/css">
+        table {
+            border-collapse: collapse;
+        }
+
+        caption,
+        td {
+            font-weight: bold;
+            font-family: helvetica, arial, sans-serif; 
+        }
+
+        caption {
+            font-size: 3em;
+            color: gray;
+        }
+
+        td {
+            font-size: 4em;
+            color: blue;
+            border: 2px solid gray;
+            padding: 5px;
+        }
+
+        div {
+            font-size: 2em;
+            color: red;
+        }
+
+        button {
+            width: 80px;
+            height: 50px;
+        }
+    </style>
+
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js'></script>
+    <script type="text/javascript">
+        var import_buttom;
+        var restart_button;
+
+        function setup(){
+            restart_button = document.getElementById(" restartBtn");
+            import_buttom = document.getElementById("importBtn");
+
+        }
+
+        function doClick(x,y){
+            var xdir = [0,0,-1,1];//右 左 上 下   
+            var ydir = [1,-1,0,0];
+            var current_block = document.getElementById("cell" + x + y);
+            for(let i=0;i<4;++i){
+                var tempx = x + xdir[i];
+                var tempy = y + ydir[i];
+                if(tempx<0||tempx>3||tempy<0||tempy>3) continue;
+                var move_block = document.getElementById("cell" + tempx + tempy);
+                if( move_block.innerHTML == ' '||  move_block.innerHTML == ''){//swap
+                    move_block.innerHTML = current_block.innerHTML;
+                    current_block.innerHTML = ' ';
+                }
+            }
+            setTimeout(function(){check_win()}, 0001);//為了讓方塊先移動，所以延遲1毫秒再呼叫function
+        }
+
+        function hover(x,y){
+            var xdir = [0,0,-1,1];//右 左 上 下   
+            var ydir = [1,-1,0,0];
+            var current_block = document.getElementById("cell" + x + y);
+            var msg = document.getElementById("msg");
+            if(current_block.innerHTML==' '||current_block.innerHTML==''){
+                msg.innerHTML = "This is a blank cell!"; return;
+            }
+            for(let i=0;i<4;++i){
+                var tempx = x + xdir[i];
+                var tempy = y + ydir[i];
+                if(tempx<0||tempx>3||tempy<0||tempy>3) continue;
+                var move_block = document.getElementById("cell" + tempx + tempy);
+                if( move_block.innerHTML == ' '||  move_block.innerHTML == ''){
+                    if(i==0){ msg.innerHTML = "This tile can move right!"; return;}
+                    if(i==1){ msg.innerHTML = "This tile can move left!"; return;}
+                    if(i==2){ msg.innerHTML = "This tile can move up!"; return;}
+                    if(i==3){ msg.innerHTML = "This tile can move down!"; return;}
+                }
+            }
+            msg.innerHTML = "Illegal move!";
+        }
+
+        var restart_num=0;
+        function restart(){
+            if(restart_num!=0){
+                var url = "https://soselab2020.github.io/puzzle/puzzle-"+ restart_num + ".json";
+                restart_num = 0;
+                btnClick();
+                $.getJSON(url, function (result) {
+                    $.each(result, function(i, field){
+                        set_data(field[0]);
+                    });
+                });
+            }
+            else{
+                location.reload();
+            }
+        }
+
+        function importData(){
+            var data_obj;
+            var num = Math.floor(1 + Math.random() * 3);//1~3
+            restart_num = num;
+            var url = "https://soselab2020.github.io/puzzle/puzzle-"+ num + ".json";
+            btnClick();
+            $.getJSON(url, function (result) {
+                $.each(result, function(i, field){
+                    set_data(field[0]);
+                });
+            });
+        }
+
+        var gif;
+        function btnClick() {
+            gif = document.getElementById('load');
+            gif.innerHTML = "<img src='loading.gif' style='position: absolute; z-index=1; top:60px; left:5px; width:350px'/>";
+            setTimeout("btnClickfade()", 1000);
+        }
+
+        function btnClickfade() {
+            gif.innerHTML = "";
+        }
+           
+        function set_data(data_array){
+            for(let i=0;i<4;i++){
+                for(let j=0;j<4;j++){
+                    document.getElementById("cell" + i + j).innerHTML = data_array[i][j];
+                }
+            }
+        }
+
+        function gotoLastStep(){
+            var count=1;
+            var random = Math.floor(Math.random() * 2);//0 or 1
+            for(let i=0;i<4;i++){
+                for(let j=0;j<4;j++){
+                    if(count<10)
+                        document.getElementById("cell" + i + j).innerHTML = '0' + count;
+                    else 
+                        document.getElementById("cell" + i + j).innerHTML = count;
+                    count++;
+                }
+            }
+            if(random==0){
+                document.getElementById("cell32").innerHTML = " ";
+                document.getElementById("cell33").innerHTML = 15;
+            }
+            else if(random==1){
+                document.getElementById("cell23").innerHTML = " ";
+                document.getElementById("cell33").innerHTML = 12;
+            }
+        }
+
+        function check_win(){
+            var count=0;
+            var answer = [["01","02","03","04"],["05","06","07","08"],["09","10","11","12"],["13","14","15"," "]];
+            var audio = document.getElementById("audio-element");
+            for(let i=0;i<4;i++){
+                for(let j=0;j<4;j++){
+                    if(document.getElementById("cell" + i + j).innerHTML == answer[i][j]) count++;
+                }
+            }
+            if(count==16){
+                audio.play();
+                window.alert("Congratulations! You win!");
+                audio.addEventListener( "ended", congratulations, false );
+            }
+        }
+
+        function congratulations(){
+            var restart = window.prompt( "Do you want to play again ? (yes/no)" );
+            if(restart == "yes") {location.reload();}
+            else return;
+        }
+
+        var bgm_count=1;
+        function switchBGM(){
+            bgm_count++;
+            var audio = document.getElementById("audio-bgm");
+            if(bgm_count%2==0){
+                audio.loop = true;
+                audio.play();
+            }
+            else{
+                audio.loop = false;
+                audio.pause();
+            }
+        }
+    </script>
+</head>
+
+<body onload="setup()">
+    <table id="board">
+        <caption>15-Puzzle</caption>
+        <div id="load"></div>
+        <tbody>
+            <tr>
+                <td onmouseover="hover( 0, 0 )" onclick="doClick( 0, 0 )" id="cell00"> </td>
+                <td onmouseover="hover( 0, 1 )" onclick="doClick( 0, 1 )" id="cell01">15</td>
+                <td onmouseover="hover( 0, 2 )" onclick="doClick( 0, 2 )" id="cell02">14</td>
+                <td onmouseover="hover( 0, 3 )" onclick="doClick( 0, 3 )" id="cell03">13</td>
+            </tr>
+            <tr>
+                <td onmouseover="hover( 1, 0 )" onclick="doClick( 1, 0 )" id="cell10">12</td>
+                <td onmouseover="hover( 1, 1 )" onclick="doClick( 1, 1 )" id="cell11">11</td>
+                <td onmouseover="hover( 1, 2 )" onclick="doClick( 1, 2 )" id="cell12">10</td>
+                <td onmouseover="hover( 1, 3 )" onclick="doClick( 1, 3 )" id="cell13">09</td>
+            </tr>
+            <tr>
+                <td onmouseover="hover( 2, 0 )" onclick="doClick( 2, 0 )" id="cell20">08</td>
+                <td onmouseover="hover( 2, 1 )" onclick="doClick( 2, 1 )" id="cell21">07</td>
+                <td onmouseover="hover( 2, 2 )" onclick="doClick( 2, 2 )" id="cell22">06</td>
+                <td onmouseover="hover( 2, 3 )" onclick="doClick( 2, 3 )" id="cell23">05</td>
+            </tr>
+            <tr>
+                <td onmouseover="hover( 3, 0 )" onclick="doClick( 3, 0 )" id="cell30">04</td>
+                <td onmouseover="hover( 3, 1 )" onclick="doClick( 3, 1 )" id="cell31">03</td>
+                <td onmouseover="hover( 3, 2 )" onclick="doClick( 3, 2 )" id="cell32">02</td>
+                <td onmouseover="hover( 3, 3 )" onclick="doClick( 3, 3 )" id="cell33">01</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>
+        <button onclick="restart()" id="restartBtn">Restart Game</button>        
+        <button onclick="importData()" id="importBtn">Import Data</button>
+        <button onclick="gotoLastStep()" id="laststepBtn">Go to the Last Step</button>
+        <button onclick="switchBGM()" id="bgmBtn">Switch BGM</button>
+    </p>
+    <div id="msg"></div>
+    <audio id="audio-element" src = "applause.mp3"></audio>
+    <audio id="audio-bgm" src = "offlimits.mp3"></audio>
+</body>
+</html>
